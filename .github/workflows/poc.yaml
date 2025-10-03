@@ -7,18 +7,20 @@ on:
 jobs:
   poc_job:
     environment: dev
+    env:
+      foo_env: ${{ vars.FOO }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set Azure CLI extensions to auto-install
-        if: success()
-        run: |
-          $output = az config set extension.use_dynamic_install=yes_without_prompt | ConvertFrom-Json
+      #- name: Set Azure CLI extensions to auto-install
+      #  if: success()
+      #  run: |
+      #    $output = az config set extension.use_dynamic_install=yes_without_prompt | ConvertFrom-Json
 
-          Write-Debug -Debug:$true -Message "$output"
-        shell: pwsh
+      #    Write-Debug -Debug:$true -Message "$output"
+      #  shell: pwsh
 
       - name: Get branch name
         run: |
@@ -26,9 +28,14 @@ jobs:
           Write-Debug -Debug:$true -Message "Branch name: $branchName"
         shell: pwsh
 
-      - name: Get environment var
+      - name: Get var from job env
         run: |
-          $envName = "${{ env.FOO }}"
-          Write-Debug -Debug:$true -Message "Environment name: $envName"
+          Write-Debug -Debug:$true -Message "Foo from env: $foo_env"
+        shell: pwsh
+
+      - name: Get environment var directly
+        run: |
+          $foo = "${{ vars.FOO }}"
+          Write-Debug -Debug:$true -Message "Foo: $foo"
         shell: pwsh
 ...
