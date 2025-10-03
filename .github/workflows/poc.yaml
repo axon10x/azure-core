@@ -6,9 +6,9 @@ on:
 
 jobs:
   poc_job:
-    environment: dev
     env:
       foo_env: ${{ vars.FOO }}
+    environment: dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,7 +30,7 @@ jobs:
 
       - name: Get var from job env
         run: |
-          Write-Debug -Debug:$true -Message "Foo from env: $foo_env"
+          Write-Debug -Debug:$true -Message "Foo from env: $env:foo_env"
         shell: pwsh
 
       - name: Get environment var directly
