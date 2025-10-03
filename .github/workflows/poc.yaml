@@ -1,0 +1,34 @@
+---
+name: POC Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  poc_job:
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set Azure CLI extensions to auto-install
+        if: success()
+        run: |
+          $output = az config set extension.use_dynamic_install=yes_without_prompt | ConvertFrom-Json
+
+          Write-Debug -Debug:$true -Message "$output"
+        shell: pwsh
+
+      - name: Get branch name
+        run: |
+          $branchName = "${{ github.ref_name }}"
+          Write-Debug -Debug:$true -Message "Branch name: $branchName"
+        shell: pwsh
+
+      - name: Get environment var
+        run: |
+          $envName = "${{ env.FOO }}"
+          Write-Debug -Debug:$true -Message "Environment name: $envName"
+        shell: pwsh
+...
