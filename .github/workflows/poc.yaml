@@ -5,9 +5,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  env_job:
+    runs-on: ubuntu-latest
+    outputs:
+      environment-name: ${{ steps.set_env_name.outputs.env_name }}
+    steps:
+      - name: Set environment name
+        id: set_env_name
+        run: |
+          $branchName = "${{ github.ref_name }}"
+          Write-Debug -Debug:$true -Message "Branch name: $branchName"
+
+          $envName = "dev"  # eventually set based on branch name
+          "env_name=$envName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        shell: pwsh
+
   poc_job:
-    env:
-      foo_env: ${{ vars.FOO }}
+    needs: env_job
+    #env:
+    #  foo_env: ${{ vars.FOO }}
     environment: dev
     runs-on: ubuntu-latest
     steps:
@@ -22,20 +38,20 @@ jobs:
       #    Write-Debug -Debug:$true -Message "$output"
       #  shell: pwsh
 
-      - name: Get branch name
+      - name: Get env name
         run: |
-          $branchName = "${{ github.ref_name }}"
-          Write-Debug -Debug:$true -Message "Branch name: $branchName"
+          $envName = ${{ needs.env_job.outputs.env_name }}
+          Write-Debug -Debug:$true -Message "Env name from env job: $envName"
         shell: pwsh
 
-      - name: Get var from job env
-        run: |
-          Write-Debug -Debug:$true -Message "Foo from env: $env:foo_env"
-        shell: pwsh
+      #- name: Get var from job env
+      #  run: |
+      #    Write-Debug -Debug:$true -Message "Foo from env: $env:foo_env"
+      #  shell: pwsh
 
-      - name: Get environment var directly
-        run: |
-          $foo = "${{ vars.FOO }}"
-          Write-Debug -Debug:$true -Message "Foo: $foo"
-        shell: pwsh
+      #- name: Get environment var directly
+      #  run: |
+      #    $foo = "${{ vars.FOO }}"
+      #    Write-Debug -Debug:$true -Message "Foo: $foo"
+      #  shell: pwsh
 ...
