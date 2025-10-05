@@ -8,7 +8,7 @@ jobs:
   env_job:
     runs-on: ubuntu-latest
     outputs:
-      environment-name: ${{ steps.set_env_name.outputs.env_name }}
+      envName: ${{ steps.set_env_name.outputs.envName }}
     steps:
       - name: Set environment name
         id: set_env_name
@@ -17,7 +17,7 @@ jobs:
           Write-Debug -Debug:$true -Message "Branch name: $branchName"
 
           $envName = "dev"  # eventually set based on branch name
-          "env_name=$envName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "envName=$envName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
         shell: pwsh
 
   poc_job:
@@ -40,7 +40,7 @@ jobs:
 
       - name: Get env name
         run: |
-          $envName = ${{ needs.env_job.outputs.env_name }}
+          $envName = ${{ needs.env_job.outputs.envName }}
           Write-Debug -Debug:$true -Message "Env name from env job: $envName"
         shell: pwsh
 
