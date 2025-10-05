@@ -24,7 +24,7 @@ jobs:
     needs: env_job
     #env:
     #  foo_env: ${{ vars.FOO }}
-    environment: dev
+    environment: ${{ needs.env_job.outputs.envName }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -40,7 +40,7 @@ jobs:
 
       - name: Get env name
         run: |
-          $envName = ${{ needs.env_job.outputs.envName }}
+          $envName = "${{ needs.env_job.outputs.envName }}"
           Write-Debug -Debug:$true -Message "Env name from env job: $envName"
         shell: pwsh
 
