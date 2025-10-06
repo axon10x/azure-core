@@ -38,20 +38,20 @@ jobs:
       #    Write-Debug -Debug:$true -Message "$output"
       #  shell: pwsh
 
-      - name: Get env name
-        run: |
-          $envName = "${{ needs.env_job.outputs.envName }}"
-          Write-Debug -Debug:$true -Message "Env name from env job: $envName"
-        shell: pwsh
+      #- name: Get env name
+      #  run: |
+      #    $envName = "${{ needs.env_job.outputs.envName }}"
+      #    Write-Debug -Debug:$true -Message "Env name from env job: $envName"
+      #  shell: pwsh
 
       #- name: Get var from job env
       #  run: |
       #    Write-Debug -Debug:$true -Message "Foo from env: $env:foo_env"
       #  shell: pwsh
 
-      #- name: Get environment var directly
-      #  run: |
-      #    $foo = "${{ vars.FOO }}"
-      #    Write-Debug -Debug:$true -Message "Foo: $foo"
-      #  shell: pwsh
+      - name: Get environment var directly
+        run: |
+          $foo = "${{ vars.FOO }}"
+          Write-Debug -Debug:$true -Message "Foo: $foo"
+        shell: pwsh
 ...
