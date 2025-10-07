@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  env_job:
+  set-environment-name-job:
     runs-on: ubuntu-latest
     outputs:
       environmentName: ${{ steps.set-environment-name.outputs.environmentName }}
@@ -22,7 +22,7 @@ jobs:
 
   poc_job:
     needs: env_job
-    environment: ${{ needs.env_job.outputs.environmentName }}
+    environment: ${{ needs.set-environment-name-job.outputs.environmentName }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
