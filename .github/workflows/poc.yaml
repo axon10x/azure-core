@@ -8,23 +8,21 @@ jobs:
   env_job:
     runs-on: ubuntu-latest
     outputs:
-      envName: ${{ steps.set_env_name.outputs.envName }}
+      envName: ${{ steps.set-environment-name.outputs.environmentName }}
     steps:
       - name: Set environment name
-        id: set_env_name
+        id: set-environment-name
         run: |
           $branchName = "${{ github.ref_name }}"
           Write-Debug -Debug:$true -Message "Branch name: $branchName"
 
-          $envName = "staging"  # eventually set based on branch name
-          "envName=$envName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          $environmentName = "staging"  # eventually set based on branch name
+          "environmentName=$environmentName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
         shell: pwsh
 
   poc_job:
     needs: env_job
-    #env:
-    #  foo_env: ${{ vars.FOO }}
-    environment: ${{ needs.env_job.outputs.envName }}
+    environment: ${{ needs.env_job.outputs.environmentName }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -34,19 +32,13 @@ jobs:
       #  if: success()
       #  run: |
       #    $output = az config set extension.use_dynamic_install=yes_without_prompt | ConvertFrom-Json
-
       #    Write-Debug -Debug:$true -Message "$output"
       #  shell: pwsh
 
       #- name: Get env name
       #  run: |
-      #    $envName = "${{ needs.env_job.outputs.envName }}"
+      #    $envName = "${{ needs.env_job.outputs.environmentName }}"
       #    Write-Debug -Debug:$true -Message "Env name from env job: $envName"
-      #  shell: pwsh
-
-      #- name: Get var from job env
-      #  run: |
-      #    Write-Debug -Debug:$true -Message "Foo from env: $env:foo_env"
       #  shell: pwsh
 
       - name: Get environment var directly
