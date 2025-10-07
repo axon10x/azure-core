@@ -16,7 +16,7 @@ jobs:
           $branchName = "${{ github.ref_name }}"
           Write-Debug -Debug:$true -Message "Branch name: $branchName"
 
-          $envName = "dev"  # eventually set based on branch name
+          $envName = "staging"  # eventually set based on branch name
           "envName=$envName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
         shell: pwsh
 
