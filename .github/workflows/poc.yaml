@@ -45,7 +45,7 @@ jobs:
 
       - name: Get env name from env
         run: |
-          $envName = "${{ vars.environmentName }}"
+          $envName = "${{ env.environmentName }}"
           Write-Debug -Debug:$true -Message "Env name from env var: $envName"
         shell: pwsh
 
