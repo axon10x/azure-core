@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  set-environment-name-job:
+  setEnvironment:
     runs-on: ubuntu-latest
     outputs:
       environmentName: ${{ steps.set-environment-name.outputs.environmentName }}
@@ -20,28 +20,36 @@ jobs:
           "environmentName=$environmentName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
         shell: pwsh
 
-  poc_job:
-    needs: env_job
-    environment: ${{ needs.set-environment-name-job.outputs.environmentName }}
+  deploy:
+    needs: setEnvironment
+    environment: ${{ needs.setEnvironment.outputs.environmentName }}
+    env:
+      environmentName: ${{ needs.setEnvironment.outputs.environmentName }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      #- name: Set Azure CLI extensions to auto-install
-      #  if: success()
-      #  run: |
-      #    $output = az config set extension.use_dynamic_install=yes_without_prompt | ConvertFrom-Json
-      #    Write-Debug -Debug:$true -Message "$output"
-      #  shell: pwsh
+      - name: Set Azure CLI extensions to auto-install
+        if: success()
+        run: |
+          $output = az config set extension.use_dynamic_install=yes_without_prompt | ConvertFrom-Json
+          Write-Debug -Debug:$true -Message "$output"
+        shell: pwsh
 
-      #- name: Get env name
-      #  run: |
-      #    $envName = "${{ needs.env_job.outputs.environmentName }}"
-      #    Write-Debug -Debug:$true -Message "Env name from env job: $envName"
-      #  shell: pwsh
+      - name: Get env name from previous job output
+        run: |
+          $envName = "${{ needs.setEnvironment.outputs.environmentName }}"
+          Write-Debug -Debug:$true -Message "Env name from env job: $envName"
+        shell: pwsh
 
-      - name: Get environment var directly
+      - name: Get env name from env
+        run: |
+          $envName = "${{ vars.environmentName }}"
+          Write-Debug -Debug:$true -Message "Env name from env var: $envName"
+        shell: pwsh
+
+      - name: Get environment var
         run: |
           $foo = "${{ vars.FOO }}"
           Write-Debug -Debug:$true -Message "Foo: $foo"
