@@ -24,7 +24,8 @@ jobs:
     needs: setEnvironment
     environment: ${{ needs.setEnvironment.outputs.environmentName }}
     env:
-      GH_TOKEN: ${{ github.token }}
+      #GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ secrets.PAT_AXON10_AZURE_CORE }}
       environmentName: ${{ needs.setEnvironment.outputs.environmentName }}
     runs-on: ubuntu-latest
     steps:
@@ -60,7 +61,6 @@ jobs:
       - name: Set environment secret
         run: |
           $envName = "${{ env.environmentName }}"
-          gh auth login --with-token "${{ secrets.PAT_AXON10_AZURE_CORE }}"
           gh secret set FOO_SECRET -e $envName -b "$envName-secret-value"
         shell: pwsh
 ...
