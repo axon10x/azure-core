@@ -58,10 +58,10 @@ jobs:
 
 
       - name: Set environment secret
+        uses: Amadevus/pwsh-script
         with:
           token: ${{ secrets.PAT_AXON10_AZURE_CORE }}
-        run: |
-          $envName = "${{ env.environmentName }}"
-          gh secret set FOO_SECRET -e $envName -b "$envName-secret-value"
-        shell: pwsh
+          script: |
+            $envName = "${{ env.environmentName }}"
+            gh secret set FOO_SECRET -e $envName -b "$envName-secret-value"
 ...
