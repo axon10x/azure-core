@@ -58,7 +58,7 @@ jobs:
 
 
       - name: Set environment secret
-        uses: Amadevus/pwsh-script
+        uses: Amadevus/pwsh-script@v2
         with:
           token: ${{ secrets.PAT_AXON10_AZURE_CORE }}
           script: |
