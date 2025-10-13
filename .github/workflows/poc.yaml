@@ -24,7 +24,7 @@ jobs:
     needs: setEnvironment
     environment: ${{ needs.setEnvironment.outputs.environmentName }}
     env:
-      #GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
       environmentName: ${{ needs.setEnvironment.outputs.environmentName }}
     runs-on: ubuntu-latest
     steps:
